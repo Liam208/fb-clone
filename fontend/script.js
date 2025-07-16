@@ -90,24 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     location.reload();
   });
 
-  // === Post Creation ===
-//   postForm.addEventListener("submit", e => {
-//     e.preventDefault();
-//     const content = postForm.querySelector("input").value.trim();
-//     if (!content) return;
-
-//     const posts = loadFromLocal("posts");
-//     posts.unshift({
-//       username: currentUser.username, 
-    
-//       avatar: currentUser.avatar || "https://randomuser.me/api/portraits/lego/2.jpg",
-//       content
-//     });
-//     saveToLocal("posts", posts);
-//     postForm.reset();
-//     renderPosts();
-//   });  
-// secen
+ 
 postForm.addEventListener("submit", e => {
   
   if (e.submitter || e.submitter.tagName !== "BUTTON") {
