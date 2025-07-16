@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Social Media App UI</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --bg: #f8fafc;
+            --card-bg: #fff;
+            --border: #e5e7eb;
+            --text: #1e293b;
+            --muted: #64748b;
+            --radius: 16px;
+            --shadow: 0 2px 12px rgba(30,41,59,0.07);
+            --accent: #dbeafe;
+            --safe-badge-bg: #d1fae5;
+            --safe-badge-text: #047857;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+        }
+        a { color: var(--primary); text-decoration: none; }
+        img, svg { display: block; }
+        /* Containers */
+        .container {
+            max-width: 400px;
+            margin: 48px auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px 24px;
+        }
+        .hidden { display: none !important; }
+        /* Auth Pages */
+        h1 {
+            margin: 0 0 24px 0;
+            font-weight: 600;
+            letter-spacing: -1px;
+            font-size: 2rem;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="email"], input[type="password"], textarea {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 18px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f1f5f9;
+            transition: border 0.2s;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 8px;
+        }
+        .btn:hover { background: var(--primary-light); }
+        .form-footer {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.97rem;
+            color: var(--muted);
+        }
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px 18px;
+            margin: 24px auto 32px auto;
+            max-width: 540px;
+        }
+        .profile-pic {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+            overflow: hidden;
+        }
+        .profile-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .profile-username {
+            font-weight: 600;
+            font-size: 1.15rem;
+        }
+        .profile-bio {
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+        .edit-profile-btn {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 18px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+            margin-left: auto;
+        }
+        .edit-profile-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        /* Feed & Post Creation */
+        .feed-container {
+            max-width: 540px;
+            margin: 0 auto 80px auto;
+            padding: 0 12px;
+        }
+        .post-form {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px 20px;
+            margin-bottom: 32px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 8px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+        }
+        /* Post List */
+        .post-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .post-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px 18px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .post-userpic {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--primary);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .post-content-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .post-username {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.05rem;
+        }
+        .post-content {
+            font-size: 1.05rem;
+            margin-bottom: 2px;
+        }
+        .post-link {
+            color: var(--primary);
+            font-size: 0.98rem;
+            word-break: break-all;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--safe-badge-bg);
+            color: var(--safe-badge-text);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 6px;
+            padding: 2px 10px;
+            margin-top: 4px;
+        }
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            background: var(--card-bg);
+            box-shadow: 0 -2px 12px rgba(30,41,59,0.07);
+            border-radius: var(--radius) var(--radius) 0 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0 4px 0;
+            z-index: 10;
+            /* display: none; */
+        }
+        .bottom-nav a {
+            flex: 1;
+            text-align: center;
+            color: var(--muted);
+            font-size: 1.3rem;
+            padding: 8px 0 4px 0;
+            transition: color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .bottom-nav a.active, .bottom-nav a:hover {
+            color: var(--primary);
+        }
+        .bottom-nav span {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        /* Responsive for phone */
+        @media (max-width: 600px) {
+            .container, .feed-container, .profile-header {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 24px 8px;
+            }
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 18px 8px;
+            }
+            .post-form, .post-card {
+                padding: 16px 8px;
+            }
+            .bottom-nav {
+                font-size: 1.1rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .profile-pic, .post-userpic { width: 38px; height: 38px; font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!--  Login Page -->
+    <div class="container" id="login-page">
+        <h1>Log In</h1>
+        <form>
+            <label for="login-email">Email or Username</label>
+            <input type="email" id="login-email" name="email" required>
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" name="password" required>
+            <button class="btn" type="submit">Log In</button>
+        </form>
+        <div class="form-footer">
+            Don't have an account? <a href="#"  id="sign-up1">Sign Up</a>
+        </div>
+    </div>
+    <!-- sign up page  -->
+    <div class="container hidden" id="signup-page">
+        <h1>Sign Up</h1>
+        <form>
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" name="username" required>
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" name="email" required>
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" name="password" required>
+            <label for="signup-confirm">Confirm Password</label>
+            <input type="password" id="signup-confirm" name="confirm-password" required>
+            <button class="btn" type="submit">Sign Up</button>
+        </form>
+        <div class="form-footer">
+            Already have an account? <a href="#">Log In</a>
+        </div>
+    </div>
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header" id="profile-header" style="display: flex;">
+        <div class="profile-pic">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="profile-info">
+            <span class="profile-username">john_doe</span>
+            <span class="profile-bio">Web enthusiast. Love to share and connect!</span>
+        </div>
+        <button class="edit-profile-btn"><i class="fa-regular fa-pen-to-square"></i> Edit Profile</button>
+    </div>
+
+    <!-- FEED & POST CREATION -->
+    <div class="feed-container" id="main-feed">
+        <form class="post-form">
+            <label for="post-content"><strong>What's on your mind?</strong></label>
+            <textarea id="post-content" name="content" required></textarea>
+            <label for="post-link">Optional Link</label>
+            <input type="text" id="post-link" name="link" placeholder="https://example.com">
+            <div class="checkbox-group">
+                <input type="checkbox" id="post-safe" name="safe">
+                <label for="post-safe">This post contains a link. Do you want to mark it as safe?</label>
+            </div>
+            <button class="btn" type="submit">Post</button>
+        </form>
+        <div class="post-list">
+            <!-- Example Post 1 -->
+            <div class="post-card">
+                <div class="post-userpic">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="alice" width="44" height="44" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div class="post-content-wrap">
+                    <span class="post-username">alice</span>
+                    <div class="post-content">Check out this cool website!</div>
+                    <a class="post-link" href="https://example.com" target="_blank">https://example.com</a>
+                    <span class="badge">Link marked as safe</span>
+                </div>
+            </div>
+            <!-- Example Post2 -->
+            <div class="post-card">
+                <div class="post-userpic">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="bob" width="44" height="44" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div class="post-content-wrap">
+                    <span class="post-username">bob</span>
+                    <div class="post-content">Hello everyone! Excited to join this platform.</div>
+                </div>
+            </div>
+            <!-- Example Post3 -->
+            <div class="post-card">
+                <div class="post-userpic">
+                    <img src="https://randomuser.me/api/portraits/men/65.jpg" alt="charlie" width="44" height="44" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div class="post-content-wrap">
+                    <span class="post-username">charlie</span>
+                    <div class="post-content">Here's a resource for learning HTML &amp; CSS.</div>
+                    <a class="post-link" href="https://developer.mozilla.org/" target="_blank">https://developer.mozilla.org/</a>
+                </div>
+            </div>
+        </div>
+    </div> <br> <br>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bottom-nav">
+        <a href="#" class="active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="#"><i class="fa-solid fa-comments"></i><span>Chat</span></a>
+        <a href="#"><i class="fa-solid fa-plus-circle"></i><span>Create</span></a>
+        <a href="#"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+        <a href="#" id="nav-logout">Logout</a>
+    </nav>
+
+   <script>
+document.addEventListener("DOMContentLoaded", () => {
+  // === Helper Functions ===
+  const saveToLocal = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+  const loadFromLocal = (key) => JSON.parse(localStorage.getItem(key)) || [];
+
+  const loginPage = document.getElementById("login-page");
+  const signupPage = document.getElementById("signup-page");
+  const feedPage = document.getElementById("main-feed");
+  const profileHeader = document.getElementById("profile-header");
+  const postList = document.querySelector(".post-list");
+  const loginForm = document.querySelector("#login-page form");
+  const signupForm = document.querySelector("#signup-page form");
+  const postForm = document.querySelector(".post-form");
+  const logoutBtn = document.getElementById("nav-logout");
+  const bottomNav = document.querySelector(".bottom-nav");
+
+  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  // === Navigation ===
+  const links = document.querySelectorAll(".bottom-nav a");
+  links.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      links.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
+
+      const id = link.id?.split("-")[1]; // ex: nav-home => "home"
+      document.querySelectorAll(".container, .feed-container, .profile-header").forEach(sec => sec.classList.add("hidden"));
+
+      if (id === "home" || id === "create") feedPage.classList.remove("hidden");
+      else if (id === "profile") profileHeader.classList.remove("hidden");
+      else if (id === "chat") alert("Chat coming soon...");
+    });
+  });
+
+  // === Auth Form Footer Links ===
+  document.querySelector("#login-page .form-footer a").addEventListener("click", () => {
+    loginPage.classList.add("hidden");
+    signupPage.classList.remove("hidden");
+  });
+
+  document.querySelector("#signup-page .form-footer a").addEventListener("click", () => {
+    signupPage.classList.add("hidden");
+    loginPage.classList.remove("hidden");
+  });
+
+  // === Login Form ===
+  loginForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const username = loginForm["login-username"].value;
+    const email = loginForm["login-email"].value;
+    const password = loginForm["login-password"].value;
+    const users = loadFromLocal("users");
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (user) {
+      currentUser = user;
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      localStorage.setItem("isLoggedIn", "true"); // ✅ set login flag
+      loadApp();
+    } else {
+      alert("Invalid credentials");
+    }
+  });
+
+  // === Sign-up Form ===
+  signupForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const username = signupForm["signup-username"].value;
+    const email = signupForm["signup-email"].value;
+    const password = signupForm["signup-password"].value;
+    const confirm = signupForm["signup-confirm"].value;
+
+    if (password !== confirm) return alert("Passwords do not match");
+
+    const users = loadFromLocal("users");
+    if (users.some(u => u.email === email)) return alert("Email already in use");
+
+    const newUser = { username, email, password, bio: "Hi! I'm new here." };
+    users.push(newUser);
+    saveToLocal("users", users);
+    alert("Account created. Please log in.");
+    signupPage.classList.add("hidden");
+    loginPage.classList.remove("hidden");
+  });
+
+  // === Logout Button ===
+  logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("currentUser");
+    localStorage.setItem("isLoggedIn", "false");
+    location.reload();
+  });
+
+  // === Post Creation ===
+  postForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const content = document.getElementById("post-content").value;
+    const link = document.getElementById("post-link").value;
+    const safe = document.getElementById("post-safe").checked;
+    const posts = loadFromLocal("posts");
+    posts.unshift({ username: currentUser.username, content, link, safe });
+    saveToLocal("posts", posts);
+    postForm.reset();
+    renderPosts();
+  });
+
+  function renderPosts() {
+    const posts = loadFromLocal("posts");
+    postList.innerHTML = "";
+    posts.forEach(post => {
+      const div = document.createElement("div");
+      div.className = "post-card";
+      div.innerHTML = `
+        <div class="post-userpic">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="post-content-wrap">
+          <span class="post-username">${post.username}</span>
+          <div class="post-content">${post.content}</div>
+          ${post.link ? `<a class="post-link" href="${post.link}" target="_blank">${post.link}</a>` : ""}
+          ${post.safe ? `<span class="badge">Link marked as safe</span>` : ""}
+        </div>
+      `;
+      postList.appendChild(div);
+    });
+  }
+
+  // === Edit Profile Bio ===
+  const profileUsername = document.querySelector(".profile-username");
+  const profileBio = document.querySelector(".profile-bio");
+
+  document.querySelector(".edit-profile-btn").addEventListener("click", () => {
+    const newBio = prompt("Update your bio:", currentUser.bio || "");
+    if (newBio !== null) {
+      currentUser.bio = newBio;
+      profileBio.textContent = newBio;
+      const users = loadFromLocal("users").map(u => u.email === currentUser.email ? currentUser : u);
+      saveToLocal("users", users);
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    }
+  });
+
+  // === Load App (if logged in) ===
+  function loadApp() {
+    loginPage.classList.add("hidden");
+    signupPage.classList.add("hidden");
+    profileHeader.classList.remove("hidden");
+    feedPage.classList.remove("hidden");
+    bottomNav.classList.remove("hidden");
+
+    profileUsername.textContent = currentUser.username;
+    profileBio.textContent = currentUser.bio || "";
+    renderPosts();
+  }
+
+  // === Initial Load Check ===
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  if (isLoggedIn && currentUser) {
+    loadApp();
+  } else {
+    loginPage.classList.remove("hidden");
+    signupPage.classList.add("hidden");
+    profileHeader.classList.add("hidden");
+    feedPage.classList.add("hidden");
+    bottomNav.classList.add("hidden");
+  }
+});
+</script>
+
+</body>
+</html>
