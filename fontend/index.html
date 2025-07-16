@@ -6,6 +6,7 @@
     <title>Social Media App UI</title>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<<<<<<< HEAD
     <style>
         :root {
             --primary: #2563eb;
@@ -290,6 +291,10 @@
             .profile-pic, .post-userpic { width: 38px; height: 38px; font-size: 1.1rem; }
         }
     </style>
+=======
+    <link rel="stylesheet" href="style.css">
+    
+>>>>>>> 067f2069c78ee9ed5f81768f0cfbf2995b8923e5
 </head>
 <body>
     <!--  Login Page -->
@@ -335,21 +340,16 @@
             <span class="profile-bio">Web enthusiast. Love to share and connect!</span>
         </div>
         <button class="edit-profile-btn"><i class="fa-regular fa-pen-to-square"></i> Edit Profile</button>
-    </div>
+        <form class="post-form">    
+             <input type="text" placeholder="What's on your mine?" id="input1">
+            <button class="btn" type="submit">Post</button>
+        </form>
+    </div> 
 
     <!-- FEED & POST CREATION -->
     <div class="feed-container" id="main-feed">
-        <form class="post-form">
-            <label for="post-content"><strong>What's on your mind?</strong></label>
-            <textarea id="post-content" name="content" required></textarea>
-            <label for="post-link">Optional Link</label>
-            <input type="text" id="post-link" name="link" placeholder="https://example.com">
-            <div class="checkbox-group">
-                <input type="checkbox" id="post-safe" name="safe">
-                <label for="post-safe">This post contains a link. Do you want to mark it as safe?</label>
-            </div>
-            <button class="btn" type="submit">Post</button>
-        </form>
+        
+            
         <div class="post-list">
             <!-- Example Post 1 -->
             <div class="post-card">
@@ -385,7 +385,7 @@
                 </div>
             </div>
         </div>
-    </div> <br> <br>
+     <br> <br>
 
     <!-- BOTTOM NAVIGATION BAR -->
     <nav class="bottom-nav">
@@ -396,176 +396,8 @@
         <a href="#" id="nav-logout">Logout</a>
     </nav>
 
-   <script>
-document.addEventListener("DOMContentLoaded", () => {
-  // === Helper Functions ===
-  const saveToLocal = (key, data) => localStorage.setItem(key, JSON.stringify(data));
-  const loadFromLocal = (key) => JSON.parse(localStorage.getItem(key)) || [];
-
-  const loginPage = document.getElementById("login-page");
-  const signupPage = document.getElementById("signup-page");
-  const feedPage = document.getElementById("main-feed");
-  const profileHeader = document.getElementById("profile-header");
-  const postList = document.querySelector(".post-list");
-  const loginForm = document.querySelector("#login-page form");
-  const signupForm = document.querySelector("#signup-page form");
-  const postForm = document.querySelector(".post-form");
-  const logoutBtn = document.getElementById("nav-logout");
-  const bottomNav = document.querySelector(".bottom-nav");
-
-  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-  // === Navigation ===
-  const links = document.querySelectorAll(".bottom-nav a");
-  links.forEach(link => {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      links.forEach(l => l.classList.remove("active"));
-      link.classList.add("active");
-
-      const id = link.id?.split("-")[1]; // ex: nav-home => "home"
-      document.querySelectorAll(".container, .feed-container, .profile-header").forEach(sec => sec.classList.add("hidden"));
-
-      if (id === "home" || id === "create") feedPage.classList.remove("hidden");
-      else if (id === "profile") profileHeader.classList.remove("hidden");
-      else if (id === "chat") alert("Chat coming soon...");
-    });
-  });
-
-  // === Auth Form Footer Links ===
-  document.querySelector("#login-page .form-footer a").addEventListener("click", () => {
-    loginPage.classList.add("hidden");
-    signupPage.classList.remove("hidden");
-  });
-
-  document.querySelector("#signup-page .form-footer a").addEventListener("click", () => {
-    signupPage.classList.add("hidden");
-    loginPage.classList.remove("hidden");
-  });
-
-  // === Login Form ===
-  loginForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const username = loginForm["login-username"].value;
-    const email = loginForm["login-email"].value;
-    const password = loginForm["login-password"].value;
-    const users = loadFromLocal("users");
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (user) {
-      currentUser = user;
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      localStorage.setItem("isLoggedIn", "true"); // ✅ set login flag
-      loadApp();
-    } else {
-      alert("Invalid credentials");
-    }
-  });
-
-  // === Sign-up Form ===
-  signupForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const username = signupForm["signup-username"].value;
-    const email = signupForm["signup-email"].value;
-    const password = signupForm["signup-password"].value;
-    const confirm = signupForm["signup-confirm"].value;
-
-    if (password !== confirm) return alert("Passwords do not match");
-
-    const users = loadFromLocal("users");
-    if (users.some(u => u.email === email)) return alert("Email already in use");
-
-    const newUser = { username, email, password, bio: "Hi! I'm new here." };
-    users.push(newUser);
-    saveToLocal("users", users);
-    alert("Account created. Please log in.");
-    signupPage.classList.add("hidden");
-    loginPage.classList.remove("hidden");
-  });
-
-  // === Logout Button ===
-  logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("currentUser");
-    localStorage.setItem("isLoggedIn", "false");
-    location.reload();
-  });
-
-  // === Post Creation ===
-  postForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const content = document.getElementById("post-content").value;
-    const link = document.getElementById("post-link").value;
-    const safe = document.getElementById("post-safe").checked;
-    const posts = loadFromLocal("posts");
-    posts.unshift({ username: currentUser.username, content, link, safe });
-    saveToLocal("posts", posts);
-    postForm.reset();
-    renderPosts();
-  });
-
-  function renderPosts() {
-    const posts = loadFromLocal("posts");
-    postList.innerHTML = "";
-    posts.forEach(post => {
-      const div = document.createElement("div");
-      div.className = "post-card";
-      div.innerHTML = `
-        <div class="post-userpic">
-          <i class="fa-solid fa-user"></i>
-        </div>
-        <div class="post-content-wrap">
-          <span class="post-username">${post.username}</span>
-          <div class="post-content">${post.content}</div>
-          ${post.link ? `<a class="post-link" href="${post.link}" target="_blank">${post.link}</a>` : ""}
-          ${post.safe ? `<span class="badge">Link marked as safe</span>` : ""}
-        </div>
-      `;
-      postList.appendChild(div);
-    });
-  }
-
-  // === Edit Profile Bio ===
-  const profileUsername = document.querySelector(".profile-username");
-  const profileBio = document.querySelector(".profile-bio");
-
-  document.querySelector(".edit-profile-btn").addEventListener("click", () => {
-    const newBio = prompt("Update your bio:", currentUser.bio || "");
-    if (newBio !== null) {
-      currentUser.bio = newBio;
-      profileBio.textContent = newBio;
-      const users = loadFromLocal("users").map(u => u.email === currentUser.email ? currentUser : u);
-      saveToLocal("users", users);
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    }
-  });
-
-  // === Load App (if logged in) ===
-  function loadApp() {
-    loginPage.classList.add("hidden");
-    signupPage.classList.add("hidden");
-    profileHeader.classList.remove("hidden");
-    feedPage.classList.remove("hidden");
-    bottomNav.classList.remove("hidden");
-
-    profileUsername.textContent = currentUser.username;
-    profileBio.textContent = currentUser.bio || "";
-    renderPosts();
-  }
-
-  // === Initial Load Check ===
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-  if (isLoggedIn && currentUser) {
-    loadApp();
-  } else {
-    loginPage.classList.remove("hidden");
-    signupPage.classList.add("hidden");
-    profileHeader.classList.add("hidden");
-    feedPage.classList.add("hidden");
-    bottomNav.classList.add("hidden");
-  }
-});
-</script>
+   <script src="script.js" defer></script>
+    <!-- <script src="script1.js" defer></script> -->
 
 </body>
 </html>
