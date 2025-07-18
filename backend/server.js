@@ -3,8 +3,8 @@ import userRoutes from './routes/routes.js'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import path from 'path'
-
 import { fileURLToPath } from 'url'
+import connectDB from './db/db.js'
 
 const App = express()
 
@@ -19,6 +19,7 @@ App.use(cookieParser())
 App.use(express.json())
 
 App.use('/', userRoutes)
+connectDB()
 App.listen(5000,() => {
     console.log("server running on 5000")
 })
