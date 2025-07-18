@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/friends.css">
+    <title>Freends</title>
+  
+</head>
+<body>
+      <div class="container">
+        <header class="header">
+            <h4 class="title">Fine Friends</h4>
+            <small class="subtitle">Search by name or location </small>
+            <input type="text" id="filter" placeholder="Search">
+        </header>
+        <ul id="result" class="user-list">
+            <li class="hide">
+        
+            </li>
+            <li>
+                <h3>Loading...</h3>
+            </li>
+        </ul> 
+      </div>
+       <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="active"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="#"><i class="fa-solid fa-comments"></i><span>Chat</span></a>
+        <a href="friends.html"><i class="fa-solid fa-plus-circle"></i><span>friends</span></a>
+        <a href="#"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+        <a href="#" id="nav-logout" class="fa-solid fa-right-from-bracket" ></a>
+    </nav>     
+      <script src="../js/script.js" defer></script>
+      <script src="../js/friends.js"></script>
+</body>
+</html>

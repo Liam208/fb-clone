@@ -33,55 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // === Auth Form Footer Links ===
-  document.querySelector("#login-page .form-footer a").addEventListener("click", () => {
-    loginPage.classList.add("hidden");
-    signupPage.classList.remove("hidden");
-  });
-
-  document.querySelector("#signup-page .form-footer a").addEventListener("click", () => {
-    signupPage.classList.add("hidden");
-    loginPage.classList.remove("hidden");
-  });
-
-  // === Login Form ===
-  loginForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const email = loginForm["login-email"].value;
-    const password = loginForm["login-password"].value;
-    const users = loadFromLocal("users");
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (user) {
-      currentUser = user;
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      localStorage.setItem("isLoggedIn", "true");
-      loadApp();
-    } else {
-      alert("Invalid credentials");
-    }
-  });
-
-  // === Sign-up Form ===
-  signupForm.addEventListener("submit", e => {
-    e.preventDefault();
-    const username = signupForm["signup-username"].value;
-    const email = signupForm["signup-email"].value;
-    const password = signupForm["signup-password"].value;
-    const confirm = signupForm["signup-confirm"].value;
-
-    if (password !== confirm) return alert("Passwords do not match");
-
-    const users = loadFromLocal("users");
-    if (users.some(u => u.email === email)) return alert("Email already in use");
-
-    const newUser = { username, email, password, bio: "Hi! I'm new here.", avatar: "https://randomuser.me/api/portraits/lego/1.jpg" };
-    users.push(newUser);
-    saveToLocal("users", users);
-    alert("Account created. Please log in.");
-    signupPage.classList.add("hidden");
-    loginPage.classList.remove("hidden");
-  });
 
   // === Logout Button ===
   logoutBtn.addEventListener("click", () => {
