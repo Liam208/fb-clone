@@ -7,7 +7,7 @@ const test = "mongodb+srv://Liam:SuTnkqCAUkb38kYt@cluster0.bdbstdv.mongodb.net/?
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(dbURI);
+        await mongoose.connect(test);
         console.log('MongoDB connected successfully')
     } catch (error) {
         console.error("Failed to connect mongodb: ", error)

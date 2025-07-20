@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs'
 import users from '../variables/users.js'
 import verifyToken from '../middleware/token.js'
 import checkAuth from '../auth/auth.js'
-
+import UserDB from '../models/users.js'
 
 const router = Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -39,7 +39,7 @@ router.get('/login', (req,res) => {
 router.post('/login', async(req,res) => {
     const {email, password} = req.body
 
-    const user = users.find(u=> u.email === email)
+    const user = await UserDB.findOne({email}).select('+password')
     if(!user) return res.status(401).json({message: "wrong mail or pass"})
     
     const isMatch = await bcrypt.compare(password, user.password)
@@ -53,14 +53,42 @@ router.post('/login', async(req,res) => {
     console.log(users)
 })
 router.post('/signup', async (req,res) => {
-    const { email, username, password } = req.body;
-    const userExists = users.find(u => u.username === username || u.email === email)
-    if(userExists) return res.status(409).json({message: "User exists"})
+    try {
+        const { email, username, password } = req.body;
+    
+        const userExists = await UserDB.findOne({email})
+        if(userExists) return res.status(409).json({message: "User with this email exists"})
 
-    const hashedPassword = await bcrypt.hash(password,10)
-    users.push({email,username,password: hashedPassword})
-    res.status(201).json({message: 'user registered'})
-    console.log(users)
+        const existingusername = await UserDB.findOne({username})
+        if (existingusername) {
+            return res.status(409).json({message: "Username is already taken"})
+        }
+        const hashedPassword = await bcrypt.hash(password,10)
+        
+        const newUser = new UserDB({
+            username,
+            email,
+            password: hashedPassword
+        })
+        await newUser.save()
+        res.status(201).json({message: 'user registered'})
+        console.log(users)
+    } catch (error) {
+        console.error("Signup error:", error);
+
+        // Mongoose validation errors (e.g., minlength, required, unique index error)
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(val => val.message);
+            return res.status(400).json({ message: messages.join(', ') }); // 400 Bad Request for invalid data
+        }
+        // Specific error for unique index violation from MongoDB if not caught by pre-check
+        // E11000 duplicate key error is for unique constraint violations
+        if (error.code === 11000) {
+            return res.status(409).json({ message: "A user with this email or username already exists." });
+        }
+
+        res.status(500).json({ message: "Server error during signup." });
+    }
 })
 
 export default router

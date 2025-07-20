@@ -17,8 +17,11 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6,
         select: false,
     }
 
 })
+
+const UserDB = mongoose.model('Users', UserSchema)
+
+export default UserDB
