@@ -100,27 +100,27 @@ postForm.addEventListener("submit", e => {
   });
 
   // === Load App ===
-  function loadApp() {
-    loginPage.classList.add("hidden");
-    signupPage.classList.add("hidden");
-    profileHeader.classList.remove("hidden");
-    feedPage.classList.remove("hidden");
-    bottomNav.classList.remove("hidden");
+  // function loadApp() {
+  //   loginPage.classList.add("hidden");
+  //   signupPage.classList.add("hidden");
+  //   profileHeader.classList.remove("hidden");
+  //   feedPage.classList.remove("hidden");
+  //   bottomNav.classList.remove("hidden");
 
-    profileUsername.textContent = currentUser.username;
-    profileBio.textContent = currentUser.bio || "";
-    renderPosts();
-  }
+  //   profileUsername.textContent = currentUser.username;
+  //   profileBio.textContent = currentUser.bio || "";
+  //   renderPosts();
+  // }
 
-  // === Initial Load Check ===
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  if (isLoggedIn && currentUser) {
-    loadApp();
-  } else {
-    loginPage.classList.remove("hidden");
-    signupPage.classList.add("hidden");
-    profileHeader.classList.add("hidden");
-    feedPage.classList.add("hidden");
-    bottomNav.classList.add("hidden");
-  }
+  // // === Initial Load Check ===
+  // const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  // if (isLoggedIn && currentUser) {
+  //   loadApp();
+  // } else {
+  //   loginPage.classList.remove("hidden");
+  //   signupPage.classList.add("hidden");
+  //   profileHeader.classList.add("hidden");
+  //   feedPage.classList.add("hidden");
+  //   bottomNav.classList.add("hidden");
+  // }
 });

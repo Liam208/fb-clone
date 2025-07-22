@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Social Media App UI</title>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../icons/css/all.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -15,12 +16,12 @@
             <i class="fa-solid fa-user"></i>
         </div>
         <div class="profile-info">
-            <span class="profile-username">john_doe</span>
+            <span class="profile-username"><%= user.username %></span>
             <span class="profile-bio">Web enthusiast. Love to share and connect!</span>
         </div>
         <button class="edit-profile-btn"><i class="fa-regular fa-pen-to-square"></i> Edit Profile</button>
-        <form class="post-form">    
-             <input type="text" placeholder="What's on your mine?" id="input1">
+        <form class="post-form" id="post-create">    
+             <textarea name="content" type="text" placeholder="What's on your mine?" id="input1" required maxlength="255"></textarea>
             <button class="btn" type="submit">Post</button>
         </form>
     </div> 
@@ -30,6 +31,20 @@
         
             
         <div class="post-list">
+            <% posts.forEach(post => {
+                %> <div class="post-card">
+
+                    <div class="post-userpic">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="alice" width="44" height="44" style="width:100%;height:100%;object-fit:cover;">
+                    </div>
+                    <div class="post-content-wrap">
+                        <span class="post-username"><%= post.userName %> </span>
+                        <div class="post-content">
+                            <%- post.content.replace(/\n/g, '<br>') %>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
             <!-- Example Post 1 -->
             <div class="post-card">
                 <div class="post-userpic">
@@ -37,8 +52,13 @@
                 </div>
                 <div class="post-content-wrap">
                     
+                    
 
-                    <span class="post-username">alice </span>
+                    <span class="post-username">alice 
+                        <a href="#">
+                            <i class="fa-solid fa-trash text-danger float-end"></i>
+                        </a>
+                </span>
                     <div class="post-content">Check out this cool website!</div>
                     <a class="post-link" href="https://example.com" target="_blank">https://example.com</a>
                     <span class="badge">Link marked as safe</span>
@@ -74,11 +94,43 @@
         <a href="#"><i class="fa-solid fa-comments"></i><span>Chat</span></a>
         <a href="friends.html"><i class="fa-solid fa-plus-circle"></i><span>friends</span></a>
         <a href="#"><i class="fa-solid fa-user"></i><span>Profile</span></a>
-        <a href="#" id="nav-logout">Logout</a>
+        <button id="nav-logout" onclick="logout()">Logout</button>
     </nav>
 
    <script src="/js/script.js" defer></script>
   
-
+    <script>
+        function logout(){
+            fetch('/logout', {
+                method: 'POST',
+                credentials: 'include'
+            }).then(() => {
+                window.location.href = '/login'
+            })
+        }
+        document.getElementById('post-create').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const content = e.target.content.value;
+            const res = await fetch('/posts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({content})
+            });
+            if (res.ok) {
+                window.location.reload()
+            }else{
+                alert("Error Posting")
+            }
+        })
+        document.getElementById('input1').addEventListener('keypress', (e) => {
+            if (e.key === "Enter" && !e.shiftKey){
+                e.preventDefault()
+                e.currentTarget.closest("#post-create").requestSubmit()
+            }
+        })
+    </script>
 </body>
 </html>
